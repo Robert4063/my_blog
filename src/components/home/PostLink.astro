@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry, CollectionKey } from 'astro:content'
+import { FormattedDate } from 'astro-pure/user'
+
+interface Props {
+  post: CollectionEntry<CollectionKey>
+}
+
+const { post } = Astro.props
+const { id, data } = post
+const date = data.updatedDate ?? data.publishDate
+---
+
+{/* A compact title link does not need to render the article or fetch its remote images. */}
+<a
+  href={`/blog/${id}`}
+  class='flex w-full flex-col gap-1 rounded-2xl border bg-background px-5 py-2.5 transition-colors hover:bg-muted hover:text-primary sm:flex-row sm:items-center'
+  data-astro-prefetch
+>
+  {date && <FormattedDate class='min-w-[95px] text-xs' {date} />}
+  <span>
+    {'pin' in data && data.pin && <span class='me-1 text-primary'>[置顶]</span>}
+    {data.draft && <span class='me-1 text-red-500'>(草稿)</span>}
+    {data.title}
+  </span>
+</a>

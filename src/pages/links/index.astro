@@ -7,9 +7,9 @@ import FriendList from '@/components/links/FriendList.astro'
 import config from 'virtual:config'
 
 const headings = [
-  { depth: 2, slug: 'common-links', text: 'Common Links' },
-  { depth: 2, slug: 'special-links', text: 'Special Links' },
-  { depth: 2, slug: 'apply-links', text: 'Apply Links' }
+  { depth: 2, slug: 'common-links', text: '常规友链' },
+  { depth: 2, slug: 'special-links', text: '特别友链' },
+  { depth: 2, slug: 'apply-links', text: '申请友链' }
 ]
 
 const { friends } = links
@@ -17,28 +17,30 @@ const linksConf = config.integ.links
 const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/public/links.json'
 ---
 
-<PageLayout title='Links' {headings} comment>
-  <p>They're sorted randomly.</p>
-  <h2 id='common-links'>Common Links</h2>
+<PageLayout title='友链' {headings} comment>
+  <p>以下友链按随机顺序排列。</p>
+  <h2 id='common-links'>常规友链</h2>
   <FriendList list={friends[0]} />
-  <Collapse title='Links with Bad Status'>
+  <Collapse title='状态异常的友链'>
     <FriendList list={friends[1]} />
   </Collapse>
-  <Collapse title='Link History Book'>
+  <Collapse title='友链动态日志'>
     <Timeline events={linksConf.logbook} />
   </Collapse>
-  <h2 id='special-links'>Special Links</h2>
+  <h2 id='special-links'>特别友链</h2>
   <FriendList list={friends[2]} />
 
-  <h2 id='apply-links'>Apply Links</h2>
-  <p>本站信息（点击复制）The site information (click to copy)：</p>
+  <h2 id='apply-links'>申请友链</h2>
+  <p>本站信息（点击复制）：</p>
   <blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4'>
     {
       linksConf.applyTip.map(({ name, val }) => {
-        const script = `navigator.clipboard.writeText('${val}');document.dispatchEvent(new CustomEvent('toast',{detail:{message:'Copied "${val}" to clipboard!'}}))`
+        const value = JSON.stringify(val)
+        const message = JSON.stringify(`已复制「${val}」到剪贴板！`)
+        const script = `navigator.clipboard.writeText(${value});document.dispatchEvent(new CustomEvent('toast',{detail:{message:${message}}}))`
         return (
           <>
-            <span class='text-end'>{name}:</span>
+            <span class='text-end'>{name}：</span>
             <samp class='cursor-pointer' onclick={script}>
               {val}
             </samp>
@@ -49,17 +51,12 @@ const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/publ
   </blockquote>
 
   <p>
-    可通过下方留言或 <a href={linkEditPage} target='_blank'>提交 PR</a> 申请友链。申请说明：<br />
-    Apply your link by leaving comment or <a href={linkEditPage} target='_blank'>Submitting a PR</a
-    >. Additional info:
+    可通过下方留言或 <a href={linkEditPage} target='_blank'>提交 PR</a> 申请友链。申请说明：
   </p>
   <ul>
-    <li>推荐了本站 You've recommended our link on your website</li>
-    <li>站点活着且有正式域名 Make sure your site is alive with a formal domain</li>
-    <li>
-      至少五篇原创文章且最近一年更新过 At least 5 original articles and exists articles released in
-      recent year
-    </li>
-    <li>内容不违反国家法律 Content does not violate laws</li>
+    <li>已在你的网站上添加了本站友链</li>
+    <li>站点可正常访问且拥有正式域名</li>
+    <li>至少五篇原创文章且最近一年有更新</li>
+    <li>站点内容不违反国家相关法律法规</li>
   </ul>
 </PageLayout>

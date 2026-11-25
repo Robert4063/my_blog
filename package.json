@@ -2,6 +2,9 @@
   "name": "my_blog",
   "type": "module",
   "version": "4.1.6",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
